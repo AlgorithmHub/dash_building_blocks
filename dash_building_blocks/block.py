@@ -159,18 +159,21 @@ class DataBlock:
         return full_id
 
     
-    def add(self, key, input, state=None, default=''):
-        state = state or []
+    def add(self, key, input=None, state=None, default=''):
         id = self.register(key)
         self.divs.append(html.Div([html.Div('{}: '.format(id),
                                             style={'fontWeight': 'bold'}),
                                    html.Div(default, id=id)]))
-        def deco(cbfunc):
-            self.app.callback(
-                self.output(key), input, state
-            )(cbfunc)
-            
-        return deco
+        if input is None:
+            return id
+        else:
+            def deco(cbfunc):
+                state = state or []
+                self.app.callback(
+                    self.output(key), input, state
+                )(cbfunc)
+
+            return deco
     
     
     def get(self, key):

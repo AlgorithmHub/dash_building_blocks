@@ -36,12 +36,12 @@ class Map(dbb.Block):
         def update_map(location):
             
             location = json.loads(location)
-            long = location['longitude']
+            lon = location['longitude']
             lat  = location['latitude']
             
             data = [dict(
                 type = 'scattergeo',
-                lon = [long],
+                lon = [lon],
                 lat = [lat],
                 text = 'Here!',
                 mode = 'markers',
@@ -65,15 +65,13 @@ class Map(dbb.Block):
 app = dash.Dash()
 app.config.suppress_callback_exceptions = True
 
-datastore = dbb.DataBlock(app, hide=True)
+datastore = dbb.DataBlock(app, hide=False)
 
 map = Map(app)
 
-userinput = dbb.InputForm(app, 
-                          id='location', 
+userinput = dbb.InputForm(app,
                           inputs=['longitude', 'latitude'],
-                          form_id='user-input',
-                          db=datastore)
+                          form_id=datastore.add('user-input'))
 
 layout = html.Div(
     children=[map.layout, userinput.layout, datastore.layout]
