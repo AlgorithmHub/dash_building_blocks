@@ -6,9 +6,9 @@ The following example contains a Clone class that encapsulates the layout and ca
 This allows the user to easily create as many "clones" as desired and resolve the many callbacks without having to wrestle with the long and mandatorily unique Dash component ids. The Block class does the dirty work behind the scenes, mapping the registered ids to the respective global Dash component ids.
 ~~~python
 import dash
+from dash.dependencies import Output, Input, State
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Output, Input, State
 import dash_building_blocks as dbb
 
 N_CLONES = 10
@@ -64,7 +64,6 @@ if __name__ == '__main__':
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Output, Input, State
 import dash_building_blocks as dbb
 import json
 
