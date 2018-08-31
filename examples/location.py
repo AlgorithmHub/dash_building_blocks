@@ -64,21 +64,21 @@ class Map(dbb.Block):
 app = dash.Dash()
 app.config.suppress_callback_exceptions = True
 
-datastore = dbb.DataBlock(app, hide=True)
+store = dbb.Store(app, hide=True)
 
 map = Map(app)
 
 userinput = dbb.InputForm(app,
                           inputs=['longitude', 'latitude'],
-                          form_id=datastore.add('user-input'))
+                          form_id=store.register('user-input'))
 
 layout = html.Div(
-    children=[map.layout, userinput.layout, datastore.layout]
+    children=[map.layout, userinput.layout, store.layout]
 )
 
 app.layout = layout
 
-map.callbacks(datastore.input('user-input'))
+map.callbacks(store.input('user-input'))
 
 
 if __name__ == '__main__':

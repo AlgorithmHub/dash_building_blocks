@@ -11,10 +11,10 @@ class InputForm(Block):
         self.inputs = inputs
         self.form_id = form_id or self('form-data')
         
-    def store(self, id, input, state=None): # pack() ?
+    def pack_inputs(self, id, input, state=None):
         state = state or []
         
-        def update_datastore(*args):
+        def update(*args):
             args = args[1:]
             return json.dumps({
                 k: v for k, v in zip(self.inputs, args)
@@ -24,7 +24,7 @@ class InputForm(Block):
             Output(id, 'children'),
             [Input(*i) for i in input], 
             [State(*s) for s in state]
-        )(update_datastore)
+        )(update)
         
     def layout(self):
         layout = html.Div([
@@ -34,9 +34,9 @@ class InputForm(Block):
         ] + [
             html.Button('Submit', id=self.register('submit-button'))
         ])
-        self.store(self.form_id, 
-                   input=[self('submit-button', 'n_clicks')],
-                   state=[self(input, 'value') for input in self.inputs])
+        self.pack_inputs(self.form_id, 
+                         input=[self('submit-button', 'n_clicks')],
+                         state=[self(input, 'value') for input in self.inputs])
         
         return layout
     

@@ -136,12 +136,12 @@ class Block:
         return self[component_id].state(component_property)
     
     
-class DataBlock:
+class Store:
     
     def __init__(self, app, id='', hide=False):
         
         self.app = app
-        self.base_id = 'data'
+        self.base_id = 'store'
         self.ids = {'this': '{}-{}'.format(self.base_id, id)}
         self.divs = []
         self.hide = hide
@@ -153,24 +153,24 @@ class DataBlock:
         return html.Div(self.divs, style=style)
         
         
-    def register(self, id):
+    def _register(self, id):
         full_id = '{}-{}'.format(self.ids['this'], id)
         self.ids.update({id: full_id})
         return full_id
 
     
-    def add(self, key, input=None, state=None, default=''):
-        id = self.register(key)
-        self.divs.append(html.Div([html.Div('{}: '.format(id),
+    def register(self, id, input=None, state=None, initially=''):
+        full_id = self._register(id)
+        self.divs.append(html.Div([html.Div('{}: '.format(full_id),
                                             style={'fontWeight': 'bold'}),
-                                   html.Div(default, id=id)]))
+                                   html.Div(initially, id=full_id)]))
         if input is None:
-            return id
+            return full_id
         else:
             def deco(cbfunc):
                 state = state or []
                 self.app.callback(
-                    self.output(key), input, state
+                    self.output(id), input, state
                 )(cbfunc)
 
             return deco

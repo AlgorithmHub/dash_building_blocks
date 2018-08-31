@@ -2,9 +2,9 @@ import sys
 sys.path.append('/workspace/dash_building_blocks')
 
 import dash
+from dash.dependencies import Output, Input, State
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Output, Input, State
 import dash_building_blocks as dbb
 
 N_CLONES = 10
