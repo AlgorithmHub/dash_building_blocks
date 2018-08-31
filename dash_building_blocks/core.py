@@ -1,16 +1,15 @@
+from dash.dependencies import Output, Input, State
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Output, Input, State
 from dash_building_blocks import Block
 import json
 
 
 class InputForm(Block):
     
-    def parameters(self, inputs, form_id=None, db=None):
+    def parameters(self, inputs, form_id=None):
         self.inputs = inputs
         self.form_id = form_id or self('form-data')
-        self.db = db
         
     def store(self, id, input, state=None): # pack() ?
         state = state or []
@@ -20,20 +19,12 @@ class InputForm(Block):
             return json.dumps({
                 k: v for k, v in zip(self.inputs, args)
             })
-        
-        if hasattr(self, 'db') and self.db is not None:
-            self.db.add(
-                self.form_id,
-                [Input(*i) for i in input], 
-                [State(*s) for s in state]
-            )(update_datastore)
             
-        else:
-            self.app.callback(
-                Output(id, 'children'),
-                [Input(*i) for i in input], 
-                [State(*s) for s in state]
-            )(update_datastore)
+        self.app.callback(
+            Output(id, 'children'),
+            [Input(*i) for i in input], 
+            [State(*s) for s in state]
+        )(update_datastore)
         
     def layout(self):
         layout = html.Div([
@@ -91,9 +82,6 @@ def togglable(app,
         dependency_inputs.append(Input(toggle_id, 'n_clicks'))
         
         def toggle_content_display(n_clicks):
-            print(n_clicks)
-#             if n_clicks is None and init_hidden:
-#                 return {'display': 'none'}
             if (n_clicks or 0) % 2 == int(init_hidden):
                 return display_style
             else:
