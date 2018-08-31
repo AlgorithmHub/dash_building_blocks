@@ -1,7 +1,7 @@
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Output, Input, State
-from finishline.blocks.block import Block
+from dash_building_blocks import Block
 
 
 class InputForm(Block):
