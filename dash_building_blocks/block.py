@@ -1,3 +1,4 @@
+import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 
@@ -33,7 +34,7 @@ def _decamelify(name, delim='-'):
     return ''.join(chars)
 
 
-class Data:
+class DataWrapper:
     
     def __init__(self, data=None):
         self.data = data or {}
@@ -77,7 +78,7 @@ class Block:
     def __init__(self, app=None, data=None, id='', **kwargs):
         
         self.app = app
-        self.data = Data(data)
+        self.data = DataWrapper(data)
         self.base_id = self.block_id()
         self.ids = {'this': self.base_id + id}
         
@@ -135,3 +136,58 @@ class Block:
         return self[component_id].state(component_property)
     
     
+class DataBlock:
+    
+    def __init__(self, app, id='', hide=False):
+        
+        self.app = app
+        self.base_id = 'data'
+        self.ids = {'this': '{}-{}'.format(self.base_id, id)}
+        self.divs = []
+        self.hide = hide
+        
+        
+    @property
+    def layout(self):
+        style = {'display': 'none'} if self.hide else None
+        return html.Div(self.divs, style=style)
+        
+        
+    def register(self, id):
+        full_id = '{}-{}'.format(self.ids['this'], id)
+        self.ids.update({id: full_id})
+        return full_id
+
+    
+    def add(self, key, input, state=None, default=''):
+        state = state or []
+        id = self.register(key)
+        self.divs.append(html.Div([html.Div('{}: '.format(id),
+                                            style={'fontWeight': 'bold'}),
+                                   html.Div(default, id=id)]))
+        def deco(cbfunc):
+            self.app.callback(
+                self.output(key), input, state
+            )(cbfunc)
+            
+        return deco
+    
+    
+    def get(self, key):
+        return self.ids[key], 'children'
+    
+    
+    def __getitem__(self, key):
+        return self.get(key)
+    
+    
+    def output(self, key):
+        return Output(*self.get(key))
+    
+    
+    def input(self, key):
+        return Input(*self.get(key))
+    
+    
+    def state(self, key):
+        return state(*self.get(key))

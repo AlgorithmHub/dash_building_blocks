@@ -2,6 +2,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Output, Input, State
 from dash_building_blocks import Block
+import json
 
 
 class InputForm(Block):
