@@ -3,7 +3,7 @@
 ## Getting Started
 #### examples/clones.py
 The following example contains a Clone class that encapsulates the layout and callback of a "clone", inheriting the base class Block.
-This allows the user to easily create as many "clones" as desired and resolve the many callbacks without having to wrestle with the long and mandatorily unique Dash component ids. The Block class does all the dirty work behind the scenes, mapping the registered ids to the respective global Dash component ids.
+This allows the user to easily create as many "clones" as desired and resolve the many callbacks without having to wrestle with the long and mandatorily unique Dash component ids. The Block class does the dirty work behind the scenes, mapping the registered ids to the respective global Dash component ids.
 ~~~python
 import dash
 import dash_html_components as html
