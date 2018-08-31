@@ -34,6 +34,7 @@ class Clone(dbb.Block):
                 return 'There are {} of us.'.format(n_clones)
             else:
                 return 'I am a clone.'
+                
             
 app = dash.Dash()
 
@@ -67,7 +68,6 @@ import dash_core_components as dcc
 import dash_building_blocks as dbb
 import json
 
-
 EMPTY_MAP = {
     'data': [{
         'long': [],
@@ -76,7 +76,6 @@ EMPTY_MAP = {
     }],
     'layout': {}
 }
-
 
 class Map(dbb.Block):
     
@@ -95,12 +94,12 @@ class Map(dbb.Block):
         def update_map(location):
             
             location = json.loads(location)
-            long = location['longitude']
-            lat  = location['latitude']
+            lon = location['longitude']
+            lat = location['latitude']
             
             data = [dict(
                 type = 'scattergeo',
-                lon = [long],
+                lon = [lon],
                 lat = [lat],
                 text = 'Here!',
                 mode = 'markers',
@@ -119,7 +118,7 @@ class Map(dbb.Block):
             layout = dict(title='World Map')
                 
             return dict(data=data, layout=layout)
-        
+            
 
 app = dash.Dash()
 app.config.suppress_callback_exceptions = True
@@ -128,11 +127,9 @@ datastore = dbb.DataBlock(app, hide=True)
 
 map = Map(app)
 
-userinput = dbb.InputForm(app, 
-                          id='location', 
+userinput = dbb.InputForm(app,
                           inputs=['longitude', 'latitude'],
-                          form_id='user-input',
-                          db=datastore)
+                          form_id=datastore.add('user-input'))
 
 layout = html.Div(
     children=[map.layout, userinput.layout, datastore.layout]
