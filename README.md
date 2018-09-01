@@ -70,7 +70,7 @@ import json
 
 EMPTY_MAP = {
     'data': [{
-        'long': [],
+        'lon': [],
         'lat': [],
         'type': 'scattergeo'
     }],
