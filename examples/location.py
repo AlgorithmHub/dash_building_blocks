@@ -1,6 +1,3 @@
-import sys
-sys.path.append('/workspace/dash_building_blocks')
-
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -10,7 +7,7 @@ import json
 
 EMPTY_MAP = {
     'data': [{
-        'long': [],
+        'lon': [],
         'lat': [],
         'type': 'scattergeo'
     }],

@@ -1,6 +1,3 @@
-import sys
-sys.path.append('/workspace/dash_building_blocks')
-
 import dash
 from dash.dependencies import Output, Input, State
 import dash_html_components as html
