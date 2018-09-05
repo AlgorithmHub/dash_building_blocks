@@ -143,14 +143,19 @@ class Store:
         self.app = app
         self.base_id = 'store'
         self.ids = {'this': '{}-{}'.format(self.base_id, id)}
-        self.divs = []
+        self.items = {}
         self.hide = hide
         
         
     @property
     def layout(self):
         style = {'display': 'none'} if self.hide else None
-        return html.Div(self.divs, style=style)
+        return html.Div([
+            html.Div([html.Div('{}: '.format(id),
+                               style={'fontWeight': 'bold'}),
+                      html.Div(initially, id=self.ids[id])])
+            for id, initially in self.items.items()
+        ], style=style)
         
         
     def _register(self, id):
@@ -161,14 +166,12 @@ class Store:
     
     def register(self, id, input=None, state=None, initially=''):
         full_id = self._register(id)
-        self.divs.append(html.Div([html.Div('{}: '.format(full_id),
-                                            style={'fontWeight': 'bold'}),
-                                   html.Div(initially, id=full_id)]))
+        self.items[id] = initially
         if input is None:
             return full_id
         else:
+            state = state or []
             def deco(cbfunc):
-                state = state or []
                 self.app.callback(
                     self.output(id), input, state
                 )(cbfunc)
