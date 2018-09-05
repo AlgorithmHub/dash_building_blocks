@@ -141,8 +141,7 @@ class Store:
     def __init__(self, app, id='', hide=False):
         
         self.app = app
-        self.base_id = 'store'
-        self.ids = {'this': '{}-{}'.format(self.base_id, id)}
+        self.ids = {'this': id}
         self.items = {}
         self.hide = hide
         
@@ -159,7 +158,9 @@ class Store:
         
         
     def _register(self, id):
-        full_id = '{}-{}'.format(self.ids['this'], id)
+        prefix = self.ids['this']
+        prefix = (prefix + '-') if prefix else prefix
+        full_id = prefix + id
         self.ids.update({id: full_id})
         return full_id
 
