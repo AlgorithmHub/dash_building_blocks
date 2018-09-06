@@ -6,9 +6,10 @@ def readme():
 
 configuration = {
     'name' : 'dash_building_blocks',
-    'version': '0.0.1',
+    'version': '0.0.2',
     'description' : 'Lightweight Auxiliary Framework for Writing Object-Oriented Dash Code.',
     'long_description' : readme(),
+    'long_description_content_type' : 'text/markdown',
     'classifiers' : [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
@@ -24,7 +25,7 @@ configuration = {
         'Programming Language :: Python :: 3 :: Only',
     ],
     'keywords' : 'dash object-oriented-programming',
-    'url' : 'http://github.com/marcodlk/dash_building_blocks', #TODO: move to AlgorithmHub
+    'url' : 'http://github.com/AlgorithmHub/dash_building_blocks',
     'maintainer' : 'Marco de Lannoy Kobayashi',
     'maintainer_email' : 'mdlkdev@gmail.com',
     'license' : 'MIT',
