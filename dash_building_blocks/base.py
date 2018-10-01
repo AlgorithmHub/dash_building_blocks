@@ -1,6 +1,6 @@
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-
+from dash_building_blocks.util import generate_random_string
 
 def _camelify(name, delims=None):
     
@@ -75,7 +75,10 @@ class Component:
     
 class Block:
 
-    def __init__(self, app=None, data=None, id='', **kwargs):
+    def __init__(self, app=None, data=None, id=None, **kwargs):
+        
+        if id is None:
+            id = generate_random_string(16)
         
         self.app = app
         self.data = DataWrapper(data)
@@ -102,9 +105,11 @@ class Block:
         pass
 
     
-    def register(self, id, full_id=None):
+    def register(self, id, full_id=None, ext=''):
         if full_id is None:
-            full_id = '{}-{}'.format(self.ids['this'], id)
+            if ext:
+                ext = '-' + str(ext)
+            full_id = '{}-{}{}'.format(self.ids['this'], id, ext)
         self.ids.update({id: full_id})
         return full_id
     
@@ -124,21 +129,24 @@ class Block:
             return self[component_id][property_id]
     
     
-    def output(self, component_id, component_property):
+    def output(self, component_id, component_property=None):
+        component_property = component_property or 'children'
         return self[component_id].output(component_property)
     
     
-    def input(self, component_id, component_property):
+    def input(self, component_id, component_property=None):
+        component_property = component_property or 'children'
         return self[component_id].input(component_property)
     
     
-    def state(self, component_id, component_property):
+    def state(self, component_id, component_property=None):
+        component_property = component_property or 'children'
         return self[component_id].state(component_property)
     
     
 class Store:
     
-    def __init__(self, app, id='', hide=False):
+    def __init__(self, app, id='', hide=True):
         
         self.app = app
         self.ids = {'this': id}
@@ -167,6 +175,7 @@ class Store:
     
     def register(self, id, input=None, state=None, initially=''):
         full_id = self._register(id)
+        print('{} -> {}'.format(id, full_id))
         self.items[id] = initially
         if input is None:
             return full_id
@@ -197,4 +206,4 @@ class Store:
     
     
     def state(self, key):
-        return state(*self.get(key))
+        return State(*self.get(key))
