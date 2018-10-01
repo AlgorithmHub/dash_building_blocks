@@ -6,7 +6,7 @@ def readme():
 
 configuration = {
     'name' : 'dash_building_blocks',
-    'version': '0.0.2',
+    'version': '0.0.3',
     'description' : 'Lightweight Auxiliary Framework for Writing Object-Oriented Dash Code.',
     'long_description' : readme(),
     'long_description_content_type' : 'text/markdown',
