@@ -25,15 +25,19 @@ configuration = {
         'Programming Language :: Python :: 3 :: Only',
     ],
     'keywords' : 'dash object-oriented-programming',
-    'url' : 'http://github.com/AlgorithmHub/dash_building_blocks',
+    'url' : 'http://github.com/AlgorithmHub/dash_buildin_blocks',
     'maintainer' : 'Marco de Lannoy Kobayashi',
     'maintainer_email' : 'mdlkdev@gmail.com',
     'license' : 'MIT',
     'packages' : ['dash_building_blocks'],
-    'install_requires': ['dash >= 0.22.0'],
+    'install_requires': [
+        'dash >= 0.22.0',
+        'dash-html-components',
+        'dash-core-components'
+    ],
     'ext_modules' : [],
     'cmdclass' : {},
-    'test_suite' : '',
+    'test_suite' : 'dash_building_blocks.tests',
     'tests_require' : [],
     'data_files' : ()
     }
