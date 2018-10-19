@@ -1,54 +1,44 @@
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-from dash_building_blocks.util import generate_random_string
+from dash_building_blocks.util import (
+    generate_random_string,
+    decamelify
+)
 
-def _camelify(name, delims=None):
-    
-    delims = delims or ['-', '_']
-    chars = []
-    headsup = False
-    
-    for c in name:
-        if headsup:
-            chars.append(c.upper())
-            headsup = False
-        elif c in delims:
-            headsup = True
-        else:
-            chars.append(c)
-            
-    return ''.join(chars)
+from dash_building_blocks.error import (
+    ProhibitedParameterError
+)
 
-            
-def _decamelify(name, delim='-'):
+class Data:
     
-    chars = [name[0].lower()]
-    
-    for c in name[1:]:
-        if c == c.upper():
-            chars.append(delim)
-            chars.append(c.lower())
-        else:
-            chars.append(c)
-            
-    return ''.join(chars)
-
-
-class DataWrapper:
-    
-    def __init__(self, data=None):
-        self.data = data or {}
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
         
+
+    @classmethod
+    def from_dict(cls, d):
+        d = d or {}
+        return cls(**d)
         
+
+    def to_dict(self):
+        return self.__dict__
+        
+
     def __getitem__(self, key):
-        return self.data[key]
-        
-        
-    def __getattr__(self, key):
-        if key == 'data':
-            return self.data
-        else:
-            return self.data[key]
+        return getattr(self, key)
+    
+
+    def __setitem(self, key, val):
+        setattr(self, key, val)
+    
+
+    def __repr__(self):
+        return repr(self.to_dict())
+    
+
+    def __bool__(self):
+        return bool(self.__dict__)
 
         
 class Component:
@@ -75,30 +65,50 @@ class Component:
     
 class Block:
 
+    sacred_attrs = ['app', 'data', 'base_id', 'ids', 'layout', '_uid']
+
     def __init__(self, app=None, data=None, id=None, **kwargs):
-        
+
         if id is None:
-            id = generate_random_string(16)
+            self._uid = generate_random_string(16)
+        else:
+            self._uid = id
         
         self.app = app
-        self.data = DataWrapper(data)
+        self.data = Data.from_dict(data)
         self.base_id = self.block_id()
-        self.ids = {'this': self.base_id + id}
+        self.ids = {'this': self._determine_this_id(self.base_id, self._uid)}
         
         self.parameters(**kwargs)
         self.layout = self.layout()
         
+    def _determine_this_id(self, base_id, uid):
+        if uid == '':
+            return base_id
+        else:
+            return base_id + '.' + uid
         
     def parameters(self, **kwargs):
-        pass
+        for key, val in kwargs.items():
+            if key in self.sacred_attrs:
+                raise ProhibitedParameterError(
+                    'Cannot define "{}" parameter as it would'
+                    ' override necessary internal attribute'
+                    .format(key))
+            else:
+                setattr(self, key, val)
         
         
     def block_id(self):
-        return _decamelify(self.__class__.__name__)
+        return decamelify(self.__class__.__name__)
 
     
     def layout(self):
         raise NotImplementedError
+
+
+    def callback(self, *args, **kwargs):
+        return self.app.callback(*args, **kwargs)
         
         
     def callbacks(self):
