@@ -195,7 +195,7 @@ class TestBlockMinimalGetDependencies(unittest.TestCase, ExtraAsserts):
     def test_output(self):
         self.assertEqualDependencies(
             self.block.output(self.ucid, 'prop'), Output(self.cid, 'prop'))
-
+            
 
 class TestHelloWorld(unittest.TestCase):
 
