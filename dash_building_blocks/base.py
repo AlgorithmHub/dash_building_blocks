@@ -86,7 +86,7 @@ class Block:
         if uid == '':
             return base_id
         else:
-            return base_id + '.' + uid
+            return base_id + '-' + uid
         
     def parameters(self, **kwargs):
         for key, val in kwargs.items():

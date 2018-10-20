@@ -119,7 +119,7 @@ class TestBlockMinimal(unittest.TestCase):
 
         block = Minimal()
         bid = block.ids['this']
-        self.assertEqual(bid, '{}.{}'.format(block.base_id, block._uid))
+        self.assertEqual(bid, '{}-{}'.format(block.base_id, block._uid))
 
         test_ext = 'test'
         test_id = block.register(test_ext)
@@ -140,7 +140,7 @@ class TestBlockMinimal(unittest.TestCase):
         block = Minimal(id=custom)
         bid = block.ids['this']
         self.assertEqual(block._uid, custom)
-        self.assertEqual(bid, '{}.{}'.format(block.base_id, block._uid))
+        self.assertEqual(bid, '{}-{}'.format(block.base_id, block._uid))
 
         test_ext = 'test'
         test_id = block.register(test_ext)
@@ -195,7 +195,7 @@ class TestBlockMinimalGetDependencies(unittest.TestCase, ExtraAsserts):
     def test_output(self):
         self.assertEqualDependencies(
             self.block.output(self.ucid, 'prop'), Output(self.cid, 'prop'))
-            
+
 
 class TestHelloWorld(unittest.TestCase):
 
@@ -233,9 +233,9 @@ class TestHelloWorld(unittest.TestCase):
         self.assertEqual(block.arg, 'ument')
 
         self.assertEqual(block.base_id, 'hello-world')
-        self.assertEqual(block.ids['this'], 'hello-world.hi')
+        self.assertEqual(block.ids['this'], 'hello-world-hi')
         div_id = block.ids['div']
-        self.assertEqual(div_id, 'hello-world.hi-div')
+        self.assertEqual(div_id, 'hello-world-hi-div')
 
         self.assertIsInstance(layout, html.Div)
         self.assertEqual(layout.children, 'hello world')
