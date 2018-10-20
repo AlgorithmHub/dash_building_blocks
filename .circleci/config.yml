@@ -1,0 +1,9 @@
+version: 2
+
+jobs:
+    build:
+        docker:
+            - image: python:3.6
+        steps:
+            - checkout
+            - run: pip install tox && tox
