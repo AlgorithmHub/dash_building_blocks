@@ -1,19 +1,20 @@
 version: 2
 
 jobs:
-
-    toxify:
-
+    build:
         docker:
             - image: python:3.6
-
         steps:
             - checkout
+    test:
+        steps:
             - run: pip install tox && tox
 
 workflows:
     version: 2
-
-    project:
+    build-and-test:
         jobs:
-            - toxify
+            - build
+            - test:
+                requires:
+                    - build
