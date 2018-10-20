@@ -1,3 +1,4 @@
+from dash_building_blocks import __version__
 from setuptools import setup
 
 def readme():
@@ -6,7 +7,7 @@ def readme():
 
 configuration = {
     'name' : 'dash_building_blocks',
-    'version': '0.0.3',
+    'version': __version__,
     'description' : 'Lightweight Auxiliary Framework for Writing Object-Oriented Dash Code.',
     'long_description' : readme(),
     'long_description_content_type' : 'text/markdown',
