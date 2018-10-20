@@ -6,15 +6,4 @@ jobs:
             - image: python:3.6
         steps:
             - checkout
-    test:
-        steps:
             - run: pip install tox && tox
-
-workflows:
-    version: 2
-    build-and-test:
-        jobs:
-            - build
-            - test:
-                requires:
-                    - build
