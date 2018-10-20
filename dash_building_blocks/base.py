@@ -159,7 +159,8 @@ class Store:
     def __init__(self, app, id='', hide=True):
         
         self.app = app
-        self.ids = {'this': id}
+        self._uid = id
+        self.ids = {'this': self._uid}
         self.items = {}
         self.hide = hide
         
@@ -185,7 +186,6 @@ class Store:
     
     def register(self, id, input=None, state=None, initially=''):
         full_id = self._register(id)
-        print('{} -> {}'.format(id, full_id))
         self.items[id] = initially
         if input is None:
             return full_id

@@ -28,6 +28,15 @@ class HelloWorld(Block):
         def update_div(value):
             return value
 
+
+class ExtraAsserts:
+
+    def assertEqualDependencies(self, dep1, dep2):
+        self.assertEqual(type(dep1), type(dep2))
+        self.assertEqual(dep1.component_id, dep2.component_id)
+        self.assertEqual(dep1.component_property, dep2.component_property)
+
+
 class TestData(unittest.TestCase):
 
     def setUp(self):
@@ -66,7 +75,7 @@ class TestData(unittest.TestCase):
         self.assertEqual(data.to_dict(), self.kwargs)
 
 
-class TestComponent(unittest.TestCase):
+class TestComponent(unittest.TestCase, ExtraAsserts):
 
     def setUp(self):
         self.id = 'test-component'
@@ -78,11 +87,6 @@ class TestComponent(unittest.TestCase):
             Component()
         except:
             self.assertRaises(TypeError)
-
-    def assertEqualDependencies(self, dep1, dep2):
-        self.assertEqual(type(dep1), type(dep2))
-        self.assertEqual(dep1.component_id, dep2.component_id)
-        self.assertEqual(dep1.component_property, dep2.component_property)
 
     def test_getitem(self):
         self.assertEqual(self.comp['prop'], (self.id, 'prop'))
@@ -168,6 +172,30 @@ class TestBlockMinimal(unittest.TestCase):
             except:
                 self.assertRaises(ProhibitedParameterError)
 
+class TestBlockMinimalGetDependencies(unittest.TestCase, ExtraAsserts):
+
+    def setUp(self):
+
+        self.ucid = 'component'
+        self.block = Minimal()
+        self.cid = self.block.register(self.ucid)
+
+    def test_getitem(self):
+        self.assertEqual(
+            self.block[self.ucid]['prop'], (self.cid, 'prop'))
+
+    def test_input(self):
+        self.assertEqualDependencies(
+            self.block.input(self.ucid, 'prop'), Input(self.cid, 'prop'))
+
+    def test_state(self):
+        self.assertEqualDependencies(
+            self.block.state(self.ucid, 'prop'), State(self.cid, 'prop'))
+
+    def test_output(self):
+        self.assertEqualDependencies(
+            self.block.output(self.ucid, 'prop'), Output(self.cid, 'prop'))
+
 
 class TestHelloWorld(unittest.TestCase):
 
@@ -226,4 +254,115 @@ class TestHelloWorld(unittest.TestCase):
 class TestStore(unittest.TestCase):
 
     def setUp(self):
-        pass
+        app = mock.Mock()
+        # instantiate reusable minimal store
+        self.store_min = Store(app) 
+
+        app = mock.Mock()
+        self.sid = 'test-store'
+        self.hide = False
+        self.store = Store(app, id=self.sid, hide=self.hide)
+
+        self.reg_id = 'test'
+
+    def test_death_init_missing_app(self):
+        try: 
+            Store()
+        except: # app is a required positional argument
+            self.assertRaises(TypeError)
+
+    def test_init_default_kwargs(self):
+
+        default_uid = ''
+        self.assertEqual(self.store_min._uid, default_uid)
+        self.assertEqual(self.store_min.ids['this'], default_uid)
+        self.assertEqual(self.store_min.items, {})
+        self.assertTrue(self.store_min.hide)
+
+    def test_init_custom_args(self):
+
+        self.assertEqual(self.store._uid, self.sid)
+        self.assertEqual(self.store.ids['this'], self.sid)
+        self.assertEqual(self.store.items, {})
+        self.assertEqual(self.store.hide, self.hide)
+
+    def test_death_register_missing_id(self):
+        try:
+            self.store_min.register()
+        except:
+            self.assertRaises(TypeError)
+
+    def test_register_default_kwargs_minimal(self):
+
+        full_id = self.store_min.register(self.reg_id)
+        # since store_min._uid == '', full_id == _id
+        self.assertTrue(isinstance(full_id, str))
+        self.assertEqual(full_id, self.reg_id)
+        self.assertEqual(self.store_min.items.get(self.reg_id), '')
+
+    def test_register_defaulf_kwargs(self):
+        
+        full_id = self.store.register(self.reg_id)
+        self.assertTrue(isinstance(full_id, str))
+        self.assertEqual(full_id, '{}-{}'.format(self.store._uid, self.reg_id))
+        self.assertEqual(self.store.items.get(self.reg_id), '')
+
+    def test_register_with_inputs(self):
+
+        inputs = mock.Mock()
+        states = mock.Mock()
+
+        deco = self.store.register(self.reg_id, 
+                                   input=inputs, 
+                                   state=states,
+                                   initially='something')
+        self.assertTrue(callable(deco))
+        self.assertEqual(self.store.items.get(self.reg_id), 'something')
+
+        self.store.app.callback.assert_not_called()
+        deco(lambda x: None)
+        self.store.app.callback.assert_called_once()
+
+    def test_layout(self):
+        
+        ucids = ['testComp'+str(i) for i in range(5)]
+        cids = [self.store.register(ucid) for ucid in ucids]
+
+        layout = self.store.layout
+
+        self.assertTrue(isinstance(layout, html.Div))
+        self.assertEqual(len(layout.children), len(cids))
+
+        for ucid, cid, outer_div in zip(ucids, cids, layout.children):
+
+            head = outer_div.children[0]
+            data = outer_div.children[1]
+            self.assertEqual(head.children, '{}: '.format(ucid))
+            self.assertEqual(head.style, {'fontWeight': 'bold'})
+            self.assertEqual(data.id, cid)
+
+
+class TestStoreGetDependencies(unittest.TestCase, ExtraAsserts):
+
+    def setUp(self):
+
+        self.ucid = 'component'
+        app = mock.Mock()
+        self.store = Store(app)
+        self.cid = self.store.register(self.ucid)
+
+    def test_getitem(self):
+        self.assertEqual(
+            self.store[self.ucid], (self.cid, 'children'))
+
+    def test_input(self):
+        self.assertEqualDependencies(
+            self.store.input(self.ucid), Input(self.cid, 'children'))
+
+    def test_state(self):
+        self.assertEqualDependencies(
+            self.store.state(self.ucid), State(self.cid, 'children'))
+
+    def test_output(self):
+        self.assertEqualDependencies(
+            self.store.output(self.ucid), Output(self.cid, 'children'))
