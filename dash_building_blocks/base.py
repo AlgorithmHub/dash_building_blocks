@@ -102,7 +102,7 @@ class Block:
     def block_id(self):
         return decamelify(self.__class__.__name__)
 
-    
+    # pylint: disable=E0202
     def layout(self):
         raise NotImplementedError
 

@@ -12,12 +12,14 @@ from dash_building_blocks.error import (
 
 class Minimal(Block):
 
+    # pylint: disable=E0202
     def layout(self):
         return None
 
 
 class HelloWorld(Block):
 
+    # pylint: disable=E0202
     def layout(self):
         return html.Div('hello world', id=self.register('div'))
 
@@ -31,6 +33,7 @@ class HelloWorld(Block):
 
 class ExtraAsserts:
 
+    # pylint: disable=E1101
     def assertEqualDependencies(self, dep1, dep2):
         self.assertEqual(type(dep1), type(dep2))
         self.assertEqual(dep1.component_id, dep2.component_id)
@@ -53,6 +56,7 @@ class TestData(unittest.TestCase):
         self.assertEqual(data.__dict__, {})
         self.assertFalse(data)
 
+    # pylint: disable=E1121
     def test_death_init_args(self):
         try:
             Data('kill me')
@@ -82,6 +86,7 @@ class TestComponent(unittest.TestCase, ExtraAsserts):
         self.comp = Component(self.id)
         self.assertEqual(self.comp.id, self.id)
 
+    # pylint: disable=E1120
     def test_death_init_default(self):
         try:
             Component()
@@ -216,6 +221,7 @@ class TestHelloWorld(unittest.TestCase):
         self.assertEqual(layout.children, 'hello world')
         self.assertEqual(layout.id, div_id)
 
+    # pylint: disable=E1101
     def test_init_custom(self):
         
         app = mock.Mock()
@@ -265,6 +271,7 @@ class TestStore(unittest.TestCase):
 
         self.reg_id = 'test'
 
+    # pylint: disable=E1120
     def test_death_init_missing_app(self):
         try: 
             Store()
@@ -286,6 +293,7 @@ class TestStore(unittest.TestCase):
         self.assertEqual(self.store.items, {})
         self.assertEqual(self.store.hide, self.hide)
 
+    # pylint: disable=E1120
     def test_death_register_missing_id(self):
         try:
             self.store_min.register()
@@ -366,3 +374,7 @@ class TestStoreGetDependencies(unittest.TestCase, ExtraAsserts):
     def test_output(self):
         self.assertEqualDependencies(
             self.store.output(self.ucid), Output(self.cid, 'children'))
+            
+
+if __name__ == '__main__':
+    unittest.main()

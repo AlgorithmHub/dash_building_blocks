@@ -38,3 +38,7 @@ class TestDeCamelify(unittest.TestCase):
         
         for camel, decam, delim in zip(camels, decamels, delims):
             self.assertEqual(decamelify(camel, delim=delim), decam)
+
+
+if __name__ == '__main__':
+    unittest.main()
