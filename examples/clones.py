@@ -8,6 +8,7 @@ N_CLONES = 10
 
 class Clone(dbb.Block):
     
+    #pylint: disable=E0202
     def layout(self):
         return html.Div([
             html.Div('I am a clone.', self.register('div')),
@@ -16,6 +17,7 @@ class Clone(dbb.Block):
     
     def callbacks(self, state_n_clones):
         
+        #pylint: disable=W0612
         @self.app.callback(
             self.output('div', 'children'),
             [self.input('button', 'n_clicks')],
