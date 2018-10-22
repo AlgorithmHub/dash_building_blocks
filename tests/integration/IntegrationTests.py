@@ -6,6 +6,7 @@ import time
 import unittest
 from selenium import webdriver
 import percy
+from .utils import invincible, wait_for
 
 
 class IntegrationTests(unittest.TestCase):
@@ -16,6 +17,24 @@ class IntegrationTests(unittest.TestCase):
         self.percy_runner.snapshot(
             name=snapshot_name
         )
+    
+    def wait_for_element_by_id(self, id):
+        wait_for(lambda: None is not invincible(
+            lambda: self.driver.find_element_by_id(id)
+        ))
+        return self.driver.find_element_by_id(id)
+
+    def wait_for_element_by(self, by, key, *args, **kwargs):
+        wait_for(lambda: None is not invincible(
+            lambda: getattr(self.driver, 'find_element_by_'+by)(key)
+        ), *args, **kwargs)
+        return getattr(self.driver, 'find_element_by_'+by)(key)
+
+    def wait_for_elements_by(self, by, key, *args, **kwargs):
+        wait_for(lambda: None is not invincible(
+            lambda: getattr(self.driver, 'find_elements_by_'+by)(key)
+        ), *args, **kwargs)
+        return getattr(self.driver, 'find_elements_by_'+by)(key)
 
     @classmethod
     def setUpClass(cls):
