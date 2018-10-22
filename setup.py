@@ -1,3 +1,4 @@
+import sys
 from dash_building_blocks import __version__
 from setuptools import setup
 
@@ -38,7 +39,7 @@ configuration = {
     ],
     'ext_modules' : [],
     'cmdclass' : {},
-    'test_suite' : 'dash_building_blocks.tests',
+    'test_suite' : 'tests.test_suite',
     'tests_require' : [],
     'data_files' : ()
     }
