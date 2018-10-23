@@ -4,9 +4,23 @@ jobs:
     "python-3.6":
         docker:
             - image: circleci/python:3.6-stretch-browsers
+                environment:
+                    REQUIREMENTS_FILE: dev-requirements.txt
         steps:
             - checkout
-            - run: sudo pip install tox && tox
+            - run:
+                name: Install dependencies
+                command: |
+                    sudo pip install virtualenv
+                    virtualenv venv
+                    . venv/bin/activate
+                    pip install -r $REQUIREMENTS_FILE
+            - run: 
+                name: Run tests
+                command:
+                    . venv/bin/activate
+                    python --version
+                    python setup.py test
 
 workflows:
     version: 2
