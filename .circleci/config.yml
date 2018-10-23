@@ -6,7 +6,7 @@ jobs:
             - image: circleci/python:3.6-stretch-browsers
         steps:
             - checkout
-            - run: pip install tox --user && tox
+            - run: sudo pip install tox && tox
 
 workflows:
     version: 2
