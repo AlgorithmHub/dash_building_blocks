@@ -4,8 +4,8 @@ jobs:
     "python-3.6":
         docker:
             - image: circleci/python:3.6-stretch-browsers
-                environment:
-                    REQUIREMENTS_FILE: dev-requirements.txt
+              environment:
+                REQUIREMENTS_FILE: dev-requirements.txt
         steps:
             - checkout
             - run:
