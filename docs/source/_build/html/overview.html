@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Overview &#8212; Dash Building Blocks 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MIT License" href="license.html" />
+    <link rel="prev" title="Motivation" href="motivation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>The entire functionality of <code class="docutils literal notranslate"><span class="pre">dash_building_blocks</span></code> drives on the <code class="docutils literal notranslate"><span class="pre">Block</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Store</span></code> base classes.
+The general way to import <code class="docutils literal notranslate"><span class="pre">dash_building_blocks</span></code> is just:</p>
+<div class="section" id="block">
+<h2>Block<a class="headerlink" href="#block" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Block</span></code> is the basic “building unit” of object-oriented Dash code.
+Inheriting <code class="docutils literal notranslate"><span class="pre">Block</span></code> provides us with some simple but useful tools for
+creating a custom “block” class that encapsulates a layout of components
+and any relevant callbacks.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">Block</span></code> class itself is an abstract class and cannot be
+instantiated.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dash_building_blocks</span> <span class="k">as</span> <span class="nn">dbb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span> <span class="o">=</span> <span class="n">dbb</span><span class="o">.</span><span class="n">Block</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  <span class="c">...</span>
+<span class="gr">NotImplementedError</span>
+</pre></div>
+</div>
+<p>This is because all <code class="docutils literal notranslate"><span class="pre">Block</span></code>-inheriting classes require at minimum a
+<code class="docutils literal notranslate"><span class="pre">layout</span></code> method to be defined. At initialization, whatever is returned by
+the defined <code class="docutils literal notranslate"><span class="pre">layout</span></code> method will become the permanent <code class="docutils literal notranslate"><span class="pre">layout</span></code> attribute
+of the instantiated block object. This is a purposefully restricting feature
+that ensures that any Dash component ids defined within the block layout
+are globally unique. More on that later.</p>
+<p>Let’s take a look at a minimal block implementation:</p>
+<blockquote>
+<div><p>import dash_html_components as html
+import dash_building_blocks as dbb</p>
+<p>class MyBlock(dbb.Block):</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>def layout(self):</dt>
+<dd>return html.Div(‘hello world’)</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p>We can then instantiate it:</p>
+<blockquote>
+<div>block = MyBlock()
+block.layout</div></blockquote>
+</div>
+<div class="section" id="store">
+<h2>Store<a class="headerlink" href="#store" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dash Building Blocks</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#block">Block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#store">Store</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">MIT License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="motivation.html" title="previous chapter">Motivation</a></li>
+      <li>Next: <a href="license.html" title="next chapter">MIT License</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, MathNimbus Inc..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/overview.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

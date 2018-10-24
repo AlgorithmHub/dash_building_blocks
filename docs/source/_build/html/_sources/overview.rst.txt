@@ -1,0 +1,51 @@
+Overview
+========
+
+The entire functionality of ``dash_building_blocks`` drives on the ``Block``
+and ``Store`` base classes.
+The general way to import ``dash_building_blocks`` is just:
+
+Block
+^^^^^
+
+The ``Block`` is the basic "building unit" of object-oriented Dash code.
+Inheriting ``Block`` provides us with some simple but useful tools for
+creating a custom "block" class that encapsulates a layout of components
+and any relevant callbacks.
+
+Note that the ``Block`` class itself is an abstract class and cannot be
+instantiated.
+
+    >>> import dash_building_blocks as dbb
+    >>> block = dbb.Block()
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      ...
+    NotImplementedError
+
+This is because all ``Block``-inheriting classes require at minimum a
+``layout`` method to be defined. At initialization, whatever is returned by
+the defined ``layout`` method will become the permanent ``layout`` attribute
+of the instantiated block object. This is a purposefully restricting feature
+that ensures that any Dash component ids defined within the block layout
+are globally unique. More on that later.
+
+Let's take a look at a minimal block implementation:
+
+    import dash_html_components as html
+    import dash_building_blocks as dbb
+
+    class MyBlock(dbb.Block):
+
+        def layout(self):
+            return html.Div('hello world')
+
+We can then instantiate it:
+
+    block = MyBlock()
+    block.layout
+
+
+Store
+^^^^^
+
