@@ -5,7 +5,6 @@ Overview
 
 The entire functionality of ``dash_building_blocks`` drives on the ``Block``
 and ``Store`` base classes.
-The general way to import ``dash_building_blocks`` is just:
 
 Block
 ^^^^^
@@ -163,7 +162,7 @@ Note the use of ``self.register('says')``. Inherited from ``Block``,
 this function allows us to define a localized id, which is created, stored
 internally, and returned by the function for convenience. Behind the scenes,
 every ``Block`` subclass object maintains a mapping of localized id to its
-globally unique counterparts. This means don't have to worry about global ids
+globally unique counterpart. This means don't have to worry about global ids
 getting mixed up (unless we explicitly mess them up). More on that later, but
 for now, just know that ``self.register('says')`` will return an id like 
 "*human-<id>-says*", where *id* is a random alphanumerical string by
@@ -185,9 +184,20 @@ Now let's define our ``Parrot`` block class.
             def update_what_i_say(whatever_human_says):
                 return '{} says: {}'.format(self.data.name, 
                                             whatever_human_says)
-            
-The high-level defintion of the app is now decoupled from the block-level
-definitions, improving readibility.
+
+Because all parrots should have the ability to repeat what some human says,
+we defined a ``callbacks`` method that expects as input a ``Human`` block
+and creates the appropriate callback. You may have noticed that ``self.app``
+and ``self.data`` were used and wondered where they came from. These will be
+available as we will pass them as arguments when initializing the block. See
+the documentation **[TODO]** for more detail on ``Block`` parameters. 
+
+With our ``Human`` and ``Parrot`` block classes defined, we can put them in 
+action. We must make sure that we pass in ``data={'name': name}`` when 
+initializing our ``Parrot``\ s so that ``self.data.name`` is available as 
+expected in our definition of the parrot ``update_what_i_say`` callback.
+
+Let's create the app:
 ::
 
     app = dash.Dash()
@@ -206,8 +216,10 @@ definitions, improving readibility.
     for parrot in parrots:
         parrot.callbacks(human)
 
+The high-level definition of the app is now decoupled from the block-level
+definitions, improving readibility. 
 
 Store
 ^^^^^
 
-TODO
+.. warning:: TODO
