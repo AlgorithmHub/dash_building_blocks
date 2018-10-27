@@ -6,5 +6,5 @@ try:
     from .core import *
 # required to import __version__ from setup.py
 #   before dependencies are installed
-except ModuleNotFoundError:
+except ImportError:
     pass
