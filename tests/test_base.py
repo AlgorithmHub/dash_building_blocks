@@ -124,7 +124,7 @@ class TestBlockMinimal(unittest.TestCase):
 
         block = Minimal()
         bid = block.ids['this']
-        self.assertEqual(bid, '{}-{}'.format(block.base_id, block._uid))
+        self.assertEqual(bid, '{}-{}'.format(block.class_id, block._uid))
 
         test_ext = 'test'
         test_id = block.register(test_ext)
@@ -134,7 +134,7 @@ class TestBlockMinimal(unittest.TestCase):
 
         block = Minimal(id='')
         bid = block.ids['this']
-        self.assertEqual(bid, block.base_id)
+        self.assertEqual(bid, block.class_id)
 
         test_ext = 'test'
         test_id = block.register(test_ext)
@@ -145,7 +145,7 @@ class TestBlockMinimal(unittest.TestCase):
         block = Minimal(id=custom)
         bid = block.ids['this']
         self.assertEqual(block._uid, custom)
-        self.assertEqual(bid, '{}-{}'.format(block.base_id, block._uid))
+        self.assertEqual(bid, '{}-{}'.format(block.class_id, block._uid))
 
         test_ext = 'test'
         test_id = block.register(test_ext)
@@ -166,7 +166,7 @@ class TestBlockMinimal(unittest.TestCase):
 
         block = Minimal(id='')
 
-        self.assertEqual(block.base_id, 'minimal')
+        self.assertEqual(block.class_id, 'minimal')
         self.assertEqual(block.ids['this'], 'minimal')
 
     def test_death_param(self):
@@ -211,7 +211,7 @@ class TestHelloWorld(unittest.TestCase):
 
         self.assertEqual(block.app, None)
         self.assertFalse(block.data)
-        self.assertEqual(block.base_id, 'hello-world')
+        self.assertEqual(block.class_id, 'hello-world')
         self.assertEqual(block.ids['this'].find('hello-world'), 0)
         div_id = block.ids['div']
         self.assertEqual(div_id.find('hello-world'), 0)
@@ -238,7 +238,7 @@ class TestHelloWorld(unittest.TestCase):
         self.assertEqual(block.key, 'word')
         self.assertEqual(block.arg, 'ument')
 
-        self.assertEqual(block.base_id, 'hello-world')
+        self.assertEqual(block.class_id, 'hello-world')
         self.assertEqual(block.ids['this'], 'hello-world-hi')
         div_id = block.ids['div']
         self.assertEqual(div_id, 'hello-world-hi-div')
@@ -320,8 +320,8 @@ class TestStore(unittest.TestCase):
         inputs = mock.Mock()
         states = mock.Mock()
 
-        deco = self.store.register(self.reg_id, 
-                                   input=inputs, 
+        deco = self.store.register(self.reg_id,
+                                   inputs=inputs,
                                    state=states,
                                    initially='something')
         self.assertTrue(callable(deco))

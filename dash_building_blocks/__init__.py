@@ -1,5 +1,5 @@
 __project__ = 'dash_building_blocks'
-__version__ = '0.0.4'
+__version__ = '0.1.0'
 
 try:
     from .base import Block, Store

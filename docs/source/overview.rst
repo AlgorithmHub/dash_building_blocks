@@ -3,18 +3,19 @@
 Overview
 ========
 
-The entire functionality of ``dash_building_blocks`` drives on the ``Block``
-and ``Store`` base classes.
+The entire functionality of :mod:`~dash_building_blocks` drives on the 
+:class:`~dash_building_blocks.base.Block` and 
+:class:`~dash_building_blocks.base.Store` classes.
 
 Block
 ^^^^^
 
-The ``Block`` is the basic "building unit" of object-oriented Dash code.
-Inheriting ``Block`` provides us with some simple but useful tools for
+The :class:`Block` is the basic "building unit" of object-oriented Dash code.
+Inheriting :class:`Block` provides us with some simple but useful tools for
 creating a custom "block" class that encapsulates a layout of components
 and any relevant callbacks.
 
-Note that the ``Block`` class itself is an abstract class and cannot be
+Note that the :class:`Block` class itself is an abstract class and cannot be
 instantiated.
 ::
 
@@ -25,7 +26,7 @@ instantiated.
       ...
     NotImplementedError
 
-This is because all ``Block``-inheriting classes require at minimum a
+This is because all :class:`Block`-inheriting classes require at minimum a
 ``layout`` method to be defined. At initialization, whatever is returned by
 the defined ``layout`` method will become the permanent ``layout`` attribute
 of the instantiated block object. This is a purposefully restricting feature
@@ -54,7 +55,7 @@ Output::
 
 As you can see, the ``html.Div('hello world')`` we implemented
 the ``MyBlock.layout`` method to return became the ``layout`` attribute at
-initialization of ``block``. We could potentially assign this simple div as
+initialization of :class:`Block`. We could potentially assign this simple div as
 the layout of a ``Dash`` app object::
 
     import dash
@@ -158,10 +159,10 @@ Let's define our ``Human`` block class.
         def layout(self):
             return html.Div('Hello World', id=self.register('says'))
 
-Note the use of ``self.register('says')``. Inherited from ``Block``,
+Note the use of ``self.register('says')``. Inherited from :class:`Block`,
 this function allows us to define a localized id, which is created, stored
 internally, and returned by the function for convenience. Behind the scenes,
-every ``Block`` subclass object maintains a mapping of localized id to its
+every :class:`Block` subclass object maintains a mapping of localized id to its
 globally unique counterpart. This means don't have to worry about global ids
 getting mixed up (unless we explicitly mess them up). More on that later, but
 for now, just know that ``self.register('says')`` will return an id like 
@@ -189,8 +190,34 @@ Because all parrots should have the ability to repeat what some human says,
 we defined a ``callbacks`` method that expects as input a ``Human`` block
 and creates the appropriate callback. You may have noticed that ``self.app``
 and ``self.data`` were used and wondered where they came from. These will be
-available as we will pass them as arguments when initializing the block. See
-the documentation **[TODO]** for more detail on ``Block`` parameters. 
+available as we will pass them as arguments when initializing the block. 
+
+You may also have noticed the ``self.output`` and ``human.input`` calls. 
+These convenience methods are inherited from :class:`Block` and return the
+Dash dependency respective to the localized component id and property
+provided. To illustrate, let's quickly use the ``MyBlock`` we 
+implemented earlier::
+
+    >>> block = MyBlock()
+    >>> block.layout
+    Div('Hello World')
+    >>> block.id
+    'my-block-ze7V9nTWCJ6thubV'
+    >>> block.register('helloworld')
+    'my-block-ze7V9nTWCJ6thubV-helloworld'
+    >>> dep = block.input('helloworld', 'children')
+    >>> dep
+    <dash.dependencies.Input at 0x11dec14e0>
+    >>> dep.component_id
+    'my-block-ze7V9nTWCJ6thubV-helloworld'
+    >>> dep.component_property
+    'children'
+    >>> block.output('helloworld', 'children')
+    <dash.dependencies.Output at 0x11dec1518>
+    >>> block.state('helloworld', 'children')
+    <dash.dependencies.State at 0x11dec12e8>
+
+See the :doc:`API documentation <api>` for more detail.
 
 With our ``Human`` and ``Parrot`` block classes defined, we can put them in 
 action. We must make sure that we pass in ``data={'name': name}`` when 

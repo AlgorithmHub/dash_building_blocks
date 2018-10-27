@@ -11,8 +11,9 @@ oriented Dash code.
    motivation
    overview
    license
+   api
 
-
+* :doc:`examples/index`
 
 Indices and tables
 ==================
@@ -20,3 +21,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. toctree::
+   :hidden:
+
+   examples/index
