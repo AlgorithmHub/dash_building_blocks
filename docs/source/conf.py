@@ -16,7 +16,7 @@ import os
 import sys
 
 here = os.path.abspath(os.path.dirname(__file__))
-dbb_relpath = os.path.join(here, '/../..')
+dbb_relpath = os.path.join(here, './../..')
 sys.path.insert(0, dbb_relpath)
 
 
