@@ -14,10 +14,24 @@
 #
 import os
 import sys
+from unittest.mock import MagicMock
 
 here = os.path.abspath(os.path.dirname(__file__))
-dbb_relpath = os.path.join(here, './../..')
+dbb_relpath = os.path.join(here, '../..')
 sys.path.insert(0, dbb_relpath)
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
+
+MOCK_MODULES = [
+    'dash',
+    'dash.dependencies',
+    'dash_html_components',
+    'dash_core_components'
+]
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
 # -- Project information -----------------------------------------------------
@@ -29,7 +43,7 @@ author = 'Marco de Lannoy Kobayashi'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.0.4'
+release = '0.1.1'
 
 
 # -- General configuration ---------------------------------------------------
