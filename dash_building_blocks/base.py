@@ -272,7 +272,9 @@ class Block:
     
     
 class Store:
-    """The Store class.
+    """The Store class streamlines the creation and use of hidden storage
+    divs. The interface is similar to that of :class:`Block`\ s but slightly
+    different due to its more specific function.
 
     :param dash.Dash app: The Dash app object.
     :param str id: The id unique to the store object.
@@ -311,7 +313,7 @@ class Store:
     def register(self, local_id, inputs=None, state=None, initially=''):
         """Register a *local_id* to be internally mapped to a globally unique
         id. If *inputs* is provided, it will return a decorator function that
-        mediates the *inputs* and *state* to an :attr:`app`.:meth:`callback`
+        mediates the *inputs* and *state* to an :meth:`app.callback`
         call. For example this:
         ::
 
@@ -359,21 +361,59 @@ class Store:
             return deco
     
     
-    def get(self, key):
-        return self.ids[key], 'children'
+    def get(self, local_id):
+        """Get the globally unique id mapped from **key**, the local id,
+        tupled with the ``'children'`` string.
+
+        :param str local_id: local_id 
+        """
+        return self.ids[local_id], 'children'
     
     
-    def __getitem__(self, key):
-        return self.get(key)
+    def __getitem__(self, local_id):
+        return self.get(local_id)
     
     
-    def output(self, key):
-        return Output(*self.get(key))
+    def output(self, component_id):
+        """Create the :class:`dash.dependencies.Output` dependency with
+        :attr:`component_id`
+        equal to the globally unique component id mapped from the 
+        *component_id* argument, and :attr:`component_property` equal to
+        ``'children'`` since all store inner components are 
+        :class:`dash.html_components.Div`\ s.
+        
+        :param str component_id: The stored div component id,\
+        local to the store.
+        :return: The :class:`dash.dependencies.Output` dependency object.
+        """
+        return Output(*self.get(component_id))
     
     
-    def input(self, key):
-        return Input(*self.get(key))
+    def input(self, component_id):
+        """Create the :class:`dash.dependencies.Input` dependency with
+        :attr:`component_id`
+        equal to the globally unique component id mapped from the 
+        *component_id* argument, and :attr:`component_property` equal to
+        ``'children'`` since all store inner components are 
+        :class:`dash.html_components.Div`\ s.
+        
+        :param str component_id: The stored div component id,\
+        local to the store.
+        :return: The :class:`dash.dependencies.Input` dependency object.
+        """
+        return Input(*self.get(component_id))
     
     
-    def state(self, key):
-        return State(*self.get(key))
+    def state(self, component_id):
+        """Create the :class:`dash.dependencies.State` dependency with
+        :attr:`component_id`
+        equal to the globally unique component id mapped from the 
+        *component_id* argument, and :attr:`component_property` equal to
+        ``'children'`` since all store inner components are 
+        :class:`dash.html_components.Div`\ s.
+        
+        :param str component_id: The stored div component id,\
+        local to the store.
+        :return: The :class:`dash.dependencies.State` dependency object.
+        """
+        return State(*self.get(component_id))
