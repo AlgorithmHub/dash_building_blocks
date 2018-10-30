@@ -3,6 +3,7 @@ from dash.dependencies import Output, Input, State
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_building_blocks as dbb
+import dash_building_blocks.experimental.common as dec
 import json
 
 
@@ -120,7 +121,7 @@ def create_location_app():
 
     map = Map(app)
 
-    userinput = dbb.InputForm(app, 
+    userinput = dec.InputForm(app, 
                             id='',
                             inputs=['longitude', 'latitude'],
                             form_id=store.register('user-input'))
