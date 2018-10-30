@@ -32,7 +32,8 @@ class InputForm(Block):
             [Input(*i) for i in input], 
             [State(*s) for s in state]
         )(update)
-        
+
+    # pylint: disable=E0202    
     def layout(self):
         children = [
             html.Div([html.Div(input), 
@@ -69,6 +70,7 @@ class Modal(Block):
         self.primary_button = buttons.get('primary')
         self.secondary_button = buttons.get('secondary')
     
+    # pylint: disable=E0202    
     def layout(self):
         
         modal_title = html.H5(
@@ -252,6 +254,7 @@ class Collapsable(Block):
         self.children = children or html.Div()
         self.buttontext = buttontext or ''
     
+    # pylint: disable=E0202    
     def layout(self):
         content = html.Div(
             children=self.children,
