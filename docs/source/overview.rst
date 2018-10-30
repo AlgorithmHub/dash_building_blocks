@@ -280,7 +280,7 @@ To streamline the creation and use of these hidden storage divs,
 is similar to that of :class:`~dash_building_blocks.base.Block`\ s but 
 slightly
 different due to its more specific function. It is hidden by default but may
-be made visible by specifying the ``hidden=False`` option at initialization,
+be made visible by specifying the ``hide=False`` option at initialization,
 which can come in handy when debugging.
 
 Before we get to using the :class:`~dash_building_blocks.base.Store`, let's

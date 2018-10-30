@@ -5,3 +5,4 @@ Examples
    :maxdepth: 1
 
    multigraph
+   location

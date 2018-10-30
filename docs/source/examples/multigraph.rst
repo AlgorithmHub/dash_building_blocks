@@ -73,7 +73,7 @@ of a single graph.
                 dcc.Graph(id=self.register('graph'))
             ], style={'width': '500'})
         
-        def callback(self):
+        def callbacks(self):
             @self.app.callback(
                 self.output('graph', 'figure'), 
                 [self.input('dropdown', 'value')]
@@ -111,7 +111,7 @@ of a single graph.
     )
 
     for graph in graphs:
-        graph.callback()
+        graph.callbacks()
 
     app.css.append_css({'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
 
