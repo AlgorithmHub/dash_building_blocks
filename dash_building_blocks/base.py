@@ -9,7 +9,7 @@ of being relevant outside of this module.
 """
 
 
-import dash_html_components as html
+from dash import html
 from dash.dependencies import Input, Output, State
 from dash_building_blocks.util import (
     generate_random_string,
